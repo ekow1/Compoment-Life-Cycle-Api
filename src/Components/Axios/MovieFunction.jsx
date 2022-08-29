@@ -1,0 +1,53 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+const baseUrl =
+  "https://api.nytimes.com/svc/movies/v2/reviews/all.json?query=&api-key=DIN2LqZSvDFA6wZiCUzAPDNeMH7Ajt3X";
+
+function MovieFunction() {
+  const [movie, setMovie] = useState([]);
+  useEffect(() => {
+    axios
+      .get(baseUrl)
+      .then((res) => setMovie(res.data.results))
+      .catch((err) => console.log(err.message));
+  }, []);
+
+  return (
+    <div className="main ">
+      <h1 style={{ marginBottom: "7%", textAlign: "center" }}>
+        Movie Review - Axios Functional Component
+      </h1>
+      <div className="review-cards">
+        {movie.map((movie, id) => {
+          return (
+            <div key={movie.id} className=" card">
+              <img
+                src={movie.multimedia?.src}
+                alt=""
+                className="card-img"
+                loading="lazy"
+              />
+              <div className="card-details">
+                <h3> {movie.display_title}</h3>
+                <p className="text">{movie.headline}</p>
+
+                <hr />
+
+                <div className="footer">
+                  <span>
+                    Critics Pick -
+                    <span className="badge"> {movie.critics_pick} </span>{" "}
+                  </span>
+                  <span>{movie.byline} </span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default MovieFunction;
